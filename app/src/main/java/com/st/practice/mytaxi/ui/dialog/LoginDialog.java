@@ -1,4 +1,4 @@
-package com.st.practice.mytaxi;
+package com.st.practice.mytaxi.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,6 +9,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.st.practice.mytaxi.R;
+import com.st.practice.mytaxi.account.AccountManager;
+import com.st.practice.mytaxi.account.IAccountManager;
+import com.st.practice.mytaxi.iview.ILoginDialogView;
 import com.st.practice.mytaxi.presenter.ILoginDialogPresenter;
 import com.st.practice.mytaxi.presenter.LoginDialogPresenter;
 

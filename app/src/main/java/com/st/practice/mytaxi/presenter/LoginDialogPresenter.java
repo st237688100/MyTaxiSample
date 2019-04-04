@@ -4,9 +4,9 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 
-import com.st.practice.mytaxi.IAccountManager;
-import com.st.practice.mytaxi.ILoginDialogView;
-import com.st.practice.mytaxi.User;
+import com.st.practice.mytaxi.account.IAccountManager;
+import com.st.practice.mytaxi.account.User;
+import com.st.practice.mytaxi.iview.ILoginDialogView;
 
 import java.lang.ref.WeakReference;
 

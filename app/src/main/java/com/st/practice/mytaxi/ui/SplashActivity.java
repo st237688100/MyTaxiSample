@@ -1,4 +1,4 @@
-package com.st.practice.mytaxi.activity;
+package com.st.practice.mytaxi.ui;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;

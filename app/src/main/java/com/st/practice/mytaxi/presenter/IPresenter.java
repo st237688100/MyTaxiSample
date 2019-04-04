@@ -1,6 +1,6 @@
 package com.st.practice.mytaxi.presenter;
 
-import com.st.practice.mytaxi.IView;
+import com.st.practice.mytaxi.iview.IView;
 
 /**
  * @Author: shiteng

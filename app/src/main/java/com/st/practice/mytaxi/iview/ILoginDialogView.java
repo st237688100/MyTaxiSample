@@ -1,10 +1,10 @@
-package com.st.practice.mytaxi;
+package com.st.practice.mytaxi.iview;
 
 /**
  * @Author: shiteng
  * @Date: 2019/4/2 22:46
  */
-public interface ILoginDialogView extends IView{
+public interface ILoginDialogView extends IView {
 
     void handleLoginSuccess();
 

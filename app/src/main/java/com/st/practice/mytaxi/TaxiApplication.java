@@ -2,11 +2,15 @@ package com.st.practice.mytaxi;
 
 import android.app.Application;
 
-public class StApplication extends Application {
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 
-    private static StApplication INSTANCE;
 
-    public static StApplication getInstance() {
+public class TaxiApplication extends Application {
+
+    private static TaxiApplication INSTANCE;
+
+    public static TaxiApplication getInstance() {
         return INSTANCE;
     }
 
@@ -16,6 +20,7 @@ public class StApplication extends Application {
         super.onCreate();
         this.INSTANCE = this;
         this.registerActivityLifecycleCallbacks(new AppLifecycleCallback());
+        Logger.addLogAdapter(new AndroidLogAdapter());
     }
 
 

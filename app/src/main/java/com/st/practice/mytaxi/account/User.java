@@ -1,4 +1,4 @@
-package com.st.practice.mytaxi;
+package com.st.practice.mytaxi.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

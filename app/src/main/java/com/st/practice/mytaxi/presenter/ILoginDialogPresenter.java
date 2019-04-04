@@ -2,8 +2,8 @@ package com.st.practice.mytaxi.presenter;
 
 import android.os.Handler;
 
-import com.st.practice.mytaxi.IView;
-import com.st.practice.mytaxi.User;
+import com.st.practice.mytaxi.account.User;
+import com.st.practice.mytaxi.iview.IView;
 
 /**
  * @Author: shiteng

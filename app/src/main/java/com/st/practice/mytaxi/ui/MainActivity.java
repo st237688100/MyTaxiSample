@@ -1,10 +1,10 @@
-package com.st.practice.mytaxi.activity;
+package com.st.practice.mytaxi.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.st.practice.mytaxi.LoginDialog;
 import com.st.practice.mytaxi.R;
+import com.st.practice.mytaxi.view.LoginDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,12 +14,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LoginDialog loginDialog = new LoginDialog(this);
+        loginDialog = new LoginDialog(this);
         loginDialog.show();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (loginDialog.isShowing()) {
+            loginDialog.dismiss();
+        }
     }
 }
