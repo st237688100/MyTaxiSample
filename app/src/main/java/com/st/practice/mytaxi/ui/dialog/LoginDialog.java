@@ -2,7 +2,6 @@ package com.st.practice.mytaxi.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -48,7 +47,7 @@ public class LoginDialog extends Dialog implements ILoginDialogView {
     }
 
 
-    public LoginDialog(@NonNull Context context) {
+    public LoginDialog(Context context) {
         super(context);
         setContentView(R.layout.dialog_login);
         ButterKnife.bind(this);
@@ -99,5 +98,11 @@ public class LoginDialog extends Dialog implements ILoginDialogView {
     @Override
     public void showError() {
         Toast.makeText(getContext(), "登录失败", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        iLoginDialogPresenter.detach();
     }
 }

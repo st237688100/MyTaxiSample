@@ -7,11 +7,11 @@ import java.util.HashMap;
  */
 public class BaseRequest implements IRequest {
 
-    private String url;
+    protected String url;
 
-    private String method;
+    protected String method;
 
-    private HashMap<String, Object> params;
+    protected HashMap<String, String> params;
 
     public String getUrl() {
         return url;
@@ -21,7 +21,7 @@ public class BaseRequest implements IRequest {
         return method;
     }
 
-    public HashMap<String, Object> getParams() {
+    public HashMap<String, String> getParams() {
         return params;
     }
 

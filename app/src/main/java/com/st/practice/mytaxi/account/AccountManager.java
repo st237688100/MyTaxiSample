@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 
+import com.st.practice.mytaxi.rxbus.AccountEvent;
+import com.st.practice.mytaxi.rxbus.RxBus;
+
 /**
  * @Author: shiteng
  * @Date: 2019/4/2 22:56
@@ -24,9 +27,11 @@ public class AccountManager implements IAccountManager {
                 SystemClock.sleep(2000);
                 if ("1234567".equals(password)) {
                     user = new User("小明", "1234567");
-                    handler.sendEmptyMessage(LOGIN_PHONE_SUC);
+                    //handler.sendEmptyMessage(LOGIN_PHONE_SUC);
+                    RxBus.getDefault().post(new AccountEvent(LOGIN_PHONE_SUC));
                 } else {
-                    handler.sendEmptyMessage(LOGIN_PHONE_FAIL);
+                    RxBus.getDefault().post(new AccountEvent(LOGIN_PHONE_FAIL));
+                    //handler.sendEmptyMessage(LOGIN_PHONE_FAIL);
                 }
             }
         }.start();
@@ -41,12 +46,14 @@ public class AccountManager implements IAccountManager {
                 SystemClock.sleep(1000);
                 if ("1234".equals(code)) {
                     user = new User("小明", "1234567");
-                    handler.sendEmptyMessage(LOGIN_SMS_SUC);
+                    RxBus.getDefault().post(new AccountEvent(LOGIN_SMS_SUC));
+                    //handler.sendEmptyMessage(LOGIN_SMS_SUC);
                 } else {
                     Message message = Message.obtain();
                     message.what = LOGIN_SMS_FAIL;
                     message.obj = "网络错误，请重试";
-                    handler.sendMessage(message);
+                    //handler.sendMessage(message);
+                    RxBus.getDefault().post(new AccountEvent(LOGIN_SMS_FAIL, "网络错误，请重试"));
                 }
             }
         }.start();
@@ -64,12 +71,14 @@ public class AccountManager implements IAccountManager {
                     Message message = Message.obtain();
                     message.what = LOGIN_GET_CODE_SUC;
                     message.obj = "1234";
-                    handler.sendMessage(message);
+                    //handler.sendMessage(message);
+                    RxBus.getDefault().post(new AccountEvent(LOGIN_GET_CODE_SUC, "1234"));
                 } else {
                     Message message = Message.obtain();
                     message.what = LOGIN_GET_CODE_FAIL;
                     message.obj = "手机号码不正确";
-                    handler.sendMessage(message);
+                    //handler.sendMessage(message);
+                    RxBus.getDefault().post(new AccountEvent(LOGIN_GET_CODE_FAIL, "手机号码不正确"));
                 }
             }
         }.start();

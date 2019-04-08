@@ -3,10 +3,10 @@ package com.st.practice.mytaxi.network;
 /**
  *
  */
-public interface IHttpClient {
+public interface IHttpClient<T extends IRequest,K extends IResponse> {
 
-    public String getBaseUrl();
+    String getBaseUrl();
 
-    public IResponse call(IRequest request);
+    K call(T request);
 
 }

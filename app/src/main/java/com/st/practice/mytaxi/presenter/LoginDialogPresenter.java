@@ -7,8 +7,14 @@ import android.os.Message;
 import com.st.practice.mytaxi.account.IAccountManager;
 import com.st.practice.mytaxi.account.User;
 import com.st.practice.mytaxi.iview.ILoginDialogView;
+import com.st.practice.mytaxi.rxbus.AccountEvent;
+import com.st.practice.mytaxi.rxbus.RxBus;
 
 import java.lang.ref.WeakReference;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -23,25 +29,13 @@ public class LoginDialogPresenter implements ILoginDialogPresenter<ILoginDialogV
 
     private MyHandler mHandler;
 
-    @Override
-    public void attach(ILoginDialogView iview) {
-        //this.dialogViewRef = new WeakReference<>(iview);
-    }
-
-    @Override
-    public void detach() {
-//        if (dialogViewRef != null) {
-//            dialogViewRef.clear();
-//            dialogViewRef = null;
-//        }
-    }
-
+    private CompositeDisposable mCompositeDisposable;
 
     public static class MyHandler extends Handler {
 
         private WeakReference<ILoginDialogView> dialogViewRef;
 
-        public MyHandler(ILoginDialogView iLoginDialogView){
+        public MyHandler(ILoginDialogView iLoginDialogView) {
             this.dialogViewRef = new WeakReference<>(iLoginDialogView);
         }
 
@@ -91,10 +85,56 @@ public class LoginDialogPresenter implements ILoginDialogPresenter<ILoginDialogV
         }
     };
 
-    public LoginDialogPresenter(ILoginDialogView iView, IAccountManager iAccountManager,MyHandler handler) {
+    @Override
+    public void attach(ILoginDialogView iView) {
+        this.dialogView = iView;
+    }
+
+    @Override
+    public void detach() {
+        timer.cancel();
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.clear();
+        }
+    }
+
+    public LoginDialogPresenter(ILoginDialogView iView, IAccountManager iAccountManager, MyHandler handler) {
         this.mHandler = handler;
         this.iAccountManager = iAccountManager;
         attach(iView);
+        mCompositeDisposable = new CompositeDisposable();
+        Disposable disposable = RxBus.getDefault()
+            .toObservable(AccountEvent.class)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe(event -> {
+                switch (event.getCode()) {
+                    case IAccountManager.LOGIN_PHONE_SUC:
+                        dialogView.showLoading(false);
+                        dialogView.handleLoginSuccess();
+                        break;
+                    case IAccountManager.LOGIN_SMS_SUC:
+                        dialogView.showLoading(false);
+                        dialogView.handleLoginSuccess();
+                        break;
+                    case IAccountManager.LOGIN_GET_CODE_SUC:
+                        dialogView.showLoading(false);
+                        dialogView.showCode(event.getMessage());
+                        break;
+                    case IAccountManager.LOGIN_PHONE_FAIL:
+                        dialogView.showLoading(false);
+                        dialogView.showRequestFail(event.getMessage());
+                        break;
+                    case IAccountManager.LOGIN_SMS_FAIL:
+                        dialogView.showLoading(false);
+                        dialogView.showRequestFail(event.getMessage());
+                        break;
+                    case IAccountManager.LOGIN_GET_CODE_FAIL:
+                        dialogView.showLoading(false);
+                        dialogView.showRequestFail(event.getMessage());
+                        break;
+                }
+            });
+        mCompositeDisposable.add(disposable);
     }
 
     @Override
@@ -125,5 +165,35 @@ public class LoginDialogPresenter implements ILoginDialogPresenter<ILoginDialogV
     public Handler getHandler() {
         return mHandler;
     }
+
+    public void onAccountEvent(AccountEvent accountEvent) {
+        switch (accountEvent.getCode()) {
+            case IAccountManager.LOGIN_PHONE_SUC:
+                dialogView.showLoading(false);
+                dialogView.handleLoginSuccess();
+                break;
+            case IAccountManager.LOGIN_SMS_SUC:
+                dialogView.showLoading(false);
+                dialogView.handleLoginSuccess();
+                break;
+            case IAccountManager.LOGIN_GET_CODE_SUC:
+                dialogView.showLoading(false);
+                dialogView.showCode(accountEvent.getMessage());
+                break;
+            case IAccountManager.LOGIN_PHONE_FAIL:
+                dialogView.showLoading(false);
+                dialogView.showRequestFail(accountEvent.getMessage());
+                break;
+            case IAccountManager.LOGIN_SMS_FAIL:
+                dialogView.showLoading(false);
+                dialogView.showRequestFail(accountEvent.getMessage());
+                break;
+            case IAccountManager.LOGIN_GET_CODE_FAIL:
+                dialogView.showLoading(false);
+                dialogView.showRequestFail(accountEvent.getMessage());
+                break;
+        }
+    }
+
 
 }

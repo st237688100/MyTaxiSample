@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.st.practice.mytaxi.R;
-import com.st.practice.mytaxi.view.LoginDialog;
+import com.st.practice.mytaxi.ui.dialog.LoginDialog;
 
 public class MainActivity extends AppCompatActivity {
 

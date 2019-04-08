@@ -23,7 +23,7 @@ import okhttp3.OkHttpClient;
 /**
  *
  */
-public abstract class MyClient extends BaseHttpClient{
+public class MyClient extends BaseHttpClient<BaseRequest,BaseResponse>{
 
     public void init(Application context){
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -82,20 +82,36 @@ public abstract class MyClient extends BaseHttpClient{
             .addCommonParams(params);                       //全局公共参数
     }
 
-
-    public BaseResponse call(BaseRequest request){
+    public BaseResponse call(BaseRequest request) {
         String url = baseUrl + request.getUrl();
-        OkGo.get(url).execute(new AbsCallback<Object>() {
-            @Override
-            public Object convertResponse(okhttp3.Response response) throws Throwable {
-                return null;
-            }
+        HttpParams params = new HttpParams();
+        params.put(request.getParams(),true);
+        if ("GET".equals(request.getMethod())) {
+            OkGo.get(url).params(params).execute(new AbsCallback<Object>() {
+                @Override
+                public Object convertResponse(okhttp3.Response response) throws Throwable {
+                    return null;
+                }
 
-            @Override
-            public void onSuccess(Response<Object> response) {
+                @Override
+                public void onSuccess(Response<Object> response) {
 
-            }
-        });
+                }
+            });
+        } else if ("POST".equals(request.getMethod())) {
+            OkGo.post(url).params(params).execute(new AbsCallback<Object>() {
+                @Override
+                public Object convertResponse(okhttp3.Response response) throws Throwable {
+                    return null;
+                }
+
+                @Override
+                public void onSuccess(Response<Object> response) {
+
+                }
+            });
+        }
+
         return null;
     }
 
@@ -108,6 +124,5 @@ public abstract class MyClient extends BaseHttpClient{
 
         return null;
     }
-
 
 }
