@@ -1,26 +1,19 @@
 package com.st.practice.mytaxi.network;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  */
-public class BaseResponse<T> implements IResponse {
+@Data
+@NoArgsConstructor
+public class BaseResponse<T>{
 
-    private int code;
+    protected int code;
 
-    private String message;
+    protected String message;
 
-    private T data;
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public T getData() {
-        return data;
-    }
+    protected T data;
 
 }

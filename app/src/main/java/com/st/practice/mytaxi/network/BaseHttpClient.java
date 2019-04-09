@@ -5,7 +5,7 @@ import android.app.Application;
 /**
  *
  */
-public abstract class BaseHttpClient<T extends BaseRequest, K extends BaseResponse> implements IHttpClient<T, K> {
+public abstract class BaseHttpClient<T extends BaseRequest, K extends BaseResponse>{
 
     protected String baseUrl;
 

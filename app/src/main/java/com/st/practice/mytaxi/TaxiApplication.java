@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.st.practice.mytaxi.network.MyClient;
 
 
 public class TaxiApplication extends Application {
@@ -21,6 +22,7 @@ public class TaxiApplication extends Application {
         this.INSTANCE = this;
         this.registerActivityLifecycleCallbacks(new AppLifecycleCallback());
         Logger.addLogAdapter(new AndroidLogAdapter());
+        MyClient.getInstance().init(this);
     }
 
 

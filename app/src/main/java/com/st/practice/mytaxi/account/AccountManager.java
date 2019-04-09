@@ -5,6 +5,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 
+import com.orhanobut.logger.Logger;
+import com.st.practice.mytaxi.network.BaseResponse;
+import com.st.practice.mytaxi.network.MyClient;
+import com.st.practice.mytaxi.network.NetCallBack;
 import com.st.practice.mytaxi.rxbus.AccountEvent;
 import com.st.practice.mytaxi.rxbus.RxBus;
 
@@ -61,28 +65,43 @@ public class AccountManager implements IAccountManager {
 
     @Override
     public void getSMSCode(final String phone) {
-        new Thread() {
+//        new Thread() {
+//
+//            @Override
+//            public void run() {
+//                SystemClock.sleep(1000);
+//                if (phone.length() == 5) {
+//                    user = new User("小明", "1234567");
+//                    Message message = Message.obtain();
+//                    message.what = LOGIN_GET_CODE_SUC;
+//                    message.obj = "1234";
+//                    //handler.sendMessage(message);
+//                    RxBus.getDefault().post(new AccountEvent(LOGIN_GET_CODE_SUC, "1234"));
+//                } else {
+//                    Message message = Message.obtain();
+//                    message.what = LOGIN_GET_CODE_FAIL;
+//                    message.obj = "手机号码不正确";
+//                    //handler.sendMessage(message);
+//                    RxBus.getDefault().post(new AccountEvent(LOGIN_GET_CODE_FAIL, "手机号码不正确"));
+//                }
+//            }
+//        }.start();
+        MyClient.getInstance().post("http://tapi.d2k.io:8030/v3.0/industryChain/user/account/login").param("username", "admin")
+            .param("password", "12345")
+            .build().execute(new NetCallBack<BaseResponse<String>>() {
+            @Override
+            public void onSuccess(BaseResponse<String> response) {
+                String data = response.getData();
+                Logger.d(data);
+                RxBus.getDefault().post(new AccountEvent(LOGIN_GET_CODE_SUC, "1234"));
+            }
 
             @Override
-            public void run() {
-                SystemClock.sleep(1000);
-                if (phone.length() == 5) {
-                    user = new User("小明", "1234567");
-                    Message message = Message.obtain();
-                    message.what = LOGIN_GET_CODE_SUC;
-                    message.obj = "1234";
-                    //handler.sendMessage(message);
-                    RxBus.getDefault().post(new AccountEvent(LOGIN_GET_CODE_SUC, "1234"));
-                } else {
-                    Message message = Message.obtain();
-                    message.what = LOGIN_GET_CODE_FAIL;
-                    message.obj = "手机号码不正确";
-                    //handler.sendMessage(message);
-                    RxBus.getDefault().post(new AccountEvent(LOGIN_GET_CODE_FAIL, "手机号码不正确"));
-                }
+            public void onError(BaseResponse response) {
+                Logger.d(response.getMessage());
+                RxBus.getDefault().post(new AccountEvent(LOGIN_GET_CODE_FAIL, "手机号码不正确"));
             }
-        }.start();
-
+        });
     }
 
     @Override

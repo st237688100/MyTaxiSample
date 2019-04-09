@@ -5,14 +5,12 @@ import android.app.Application;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
-import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
-import com.lzy.okgo.model.Response;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +22,18 @@ import okhttp3.OkHttpClient;
  *
  */
 public class MyClient extends BaseHttpClient<BaseRequest,BaseResponse>{
+
+    public final static String METHOD_GET = "GET";
+    public final static String METHOD_POST = "POST";
+
+    private static final MyClient MY_CLIENT = new MyClient();
+
+    private MyClient(){
+    }
+
+    public static MyClient getInstance(){
+        return MY_CLIENT;
+    }
 
     public void init(Application context){
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -69,6 +79,8 @@ public class MyClient extends BaseHttpClient<BaseRequest,BaseResponse>{
         // header
         HttpHeaders headers = new HttpHeaders();
         headers.put("commonHeaderKey1", "commonHeaderValue1");    //header不支持中文，不允许有特殊字符
+        // header 里面的contentType 无法改变，通过不同的方法 upJson,upString 切换
+        //headers.put(HttpHeaders.HEAD_KEY_CONTENT_TYPE, "application/json");
         HttpParams params = new HttpParams();
         params.put("commonParamsKey1", "commonParamsValue1");     //param支持中文,直接传,不要自己编码
         params.put("commonParamsKey2", "支持中文参数");
@@ -77,52 +89,19 @@ public class MyClient extends BaseHttpClient<BaseRequest,BaseResponse>{
             .setOkHttpClient(builder.build())               //建议设置OkHttpClient，不设置将使用默认的
             .setCacheMode(CacheMode.NO_CACHE)               //全局统一缓存模式，默认不使用缓存，可以不传
             .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)   //全局统一缓存时间，默认永不过期，可以不传
-            .setRetryCount(1)                               //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
+            .setRetryCount(0)                               //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
             .addCommonHeaders(headers)                      //全局公共头
             .addCommonParams(params);                       //全局公共参数
     }
 
-    public BaseResponse call(BaseRequest request) {
-        String url = baseUrl + request.getUrl();
-        HttpParams params = new HttpParams();
-        params.put(request.getParams(),true);
-        if ("GET".equals(request.getMethod())) {
-            OkGo.get(url).params(params).execute(new AbsCallback<Object>() {
-                @Override
-                public Object convertResponse(okhttp3.Response response) throws Throwable {
-                    return null;
-                }
 
-                @Override
-                public void onSuccess(Response<Object> response) {
-
-                }
-            });
-        } else if ("POST".equals(request.getMethod())) {
-            OkGo.post(url).params(params).execute(new AbsCallback<Object>() {
-                @Override
-                public Object convertResponse(okhttp3.Response response) throws Throwable {
-                    return null;
-                }
-
-                @Override
-                public void onSuccess(Response<Object> response) {
-
-                }
-            });
-        }
-
-        return null;
+    public RequestBuilder get(String url){
+        return new RequestBuilder().url(url).method(METHOD_GET);
     }
 
-    public BaseRequest get(String url){
-        BaseRequest request = new BaseRequest();
-        return null;
+    public RequestBuilder post(String url){
+        return new RequestBuilder().url(url).method(METHOD_POST);
     }
 
-    public BaseResponse post(BaseRequest request){
-
-        return null;
-    }
 
 }

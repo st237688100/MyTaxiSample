@@ -14,4 +14,11 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void testJDKProxy(){
+        StudentService studentService = new StudentService();
+        UserProxyHandler userProxyHandler = new UserProxyHandler(studentService);
+        userProxyHandler.getProxyInstance().work("proxy go school");
+    }
 }

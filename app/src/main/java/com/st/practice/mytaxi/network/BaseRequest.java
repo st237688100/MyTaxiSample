@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  *
  */
-public class BaseRequest implements IRequest {
+public class BaseRequest<T>{
 
     protected String url;
 
@@ -13,16 +13,17 @@ public class BaseRequest implements IRequest {
 
     protected HashMap<String, String> params;
 
-    public String getUrl() {
-        return url;
+    public BaseRequest(RequestBuilder builder) {
+        url = builder.getUrl();
+        method = builder.getMethod();
+        params = builder.getParams();
     }
 
-    public String getMethod() {
-        return method;
-    }
+    public BaseResponse<T> execute(){
+        return null;
+    };
 
-    public HashMap<String, String> getParams() {
-        return params;
-    }
+    /** 非阻塞方法，异步请求，但是回调在子线程中执行 */
+    public void execute(NetCallBack<BaseResponse<T>> callback){};
 
 }

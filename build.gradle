@@ -25,3 +25,21 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    // App tools version
+    compileSdkVersion = 27
+    minSdkVersion = 14
+    targetSdkVersion = 27
+    buildToolsVersion = "27.0.3"
+
+    // App dependencies versions
+    okHttp3Version = "3.10.0"
+    lombokVersion = "1.18.6"
+    gsonVersion = "2.8.2"
+    rxJava2Version = "2.2.2"
+    rxJava2AndroidVersion = "2.1.0"
+    jUnitVersion = "4.12"
+    mockWebServerVersion = "3.10.0"
+    supportAppCompatVersion = "27.1.1"
+}
